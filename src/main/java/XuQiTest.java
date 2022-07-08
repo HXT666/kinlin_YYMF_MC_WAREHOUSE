@@ -90,9 +90,18 @@ public class XuQiTest extends Aggregator {
                 writables2[i] = text;
             } else if (isNew && !"".equals(writables2[i].toString())) {
                 // 最新记录 且 字段值不为 null，update
-                ((Text) writables1[i]).set(text.getBytes());
+
+                byte[] bytes = new byte[text.getBytes().length];
+                System.arraycopy(text.getBytes(),0,bytes,0,text.getBytes().length);
+                Text t1 = new Text(bytes);
+                writables1[i] = t1;
+
+
             } else if (!isNew && "".equals(writables1[i].toString())){
-                ((Text) writables1[i]).set(text.getBytes());
+                byte[] bytes = new byte[text.getBytes().length];
+                System.arraycopy(text.getBytes(),0,bytes,0,text.getBytes().length);
+                writables1[i] = new Text(bytes);
+//                ((Text) writables1[i]).set(text.getBytes());
             }
         }
         System.out.println("after compute buffer1: " + Arrays.toString(writables1));
